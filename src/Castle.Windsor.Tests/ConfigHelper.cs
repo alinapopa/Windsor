@@ -18,16 +18,18 @@ namespace Castle.Windsor.Tests
 	using System;
 	using System.IO;
 
+	using CastleTests;
+
 	internal sealed class ConfigHelper
 	{
 		public static string ResolveConfigPath(string configFilePath)
 		{
-			return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, configFilePath);
+			return Path.Combine(ApplicationDomains.BaseDirectory, configFilePath);
 		}
 
 		public static string ResolveConfigPath(string configFilePath, params object[] parameters)
 		{
-			return Path.Combine(AppDomain.CurrentDomain.BaseDirectory, string.Format(configFilePath, parameters));
+			return Path.Combine(ApplicationDomains.BaseDirectory, string.Format(configFilePath, parameters));
 		}
 	}
 }

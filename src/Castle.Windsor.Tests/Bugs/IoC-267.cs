@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_APPDOMAIN
 namespace Castle.Bugs
 {
-#if !SILVERLIGHT
 	using System;
 	using System.CodeDom.Compiler;
 	using System.Linq;
@@ -56,5 +56,5 @@ namespace Castle.Bugs
 			// The type 'int' must be a reference type in order to use it as parameter 'S' in the generic type or method 'Castle.MicroKernel.Registration.Component.For<S>()'
 		}
 	}
-#endif
 }
+#endif
