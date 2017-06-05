@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if CASTLE_LOG4NETINTEGRATION
 namespace CastleTests.LoggingFacility
 {
-#if !(SILVERLIGHT)
 	using Castle.Core.Logging;
 	using Castle.Core.Resource;
 	using Castle.Facilities.Logging;
@@ -54,5 +54,5 @@ namespace CastleTests.LoggingFacility
 			}
 		}
 	}
-#endif
 }
+#endif

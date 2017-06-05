@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#if !SILVERLIGHT
+#if FEATURE_WINFORMS
 using System.Threading;
 using NUnit.Framework;
 [assembly: Apartment(ApartmentState.STA)]

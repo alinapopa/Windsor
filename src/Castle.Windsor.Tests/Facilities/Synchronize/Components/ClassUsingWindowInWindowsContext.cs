@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_WINFORMS
 namespace CastleTests.Facilities.Synchronize.Components
 {
-#if !SILVERLIGHT
 	using System.Windows.Threading;
 
 	using Castle.Facilities.Synchronize;
@@ -23,5 +23,5 @@ namespace CastleTests.Facilities.Synchronize.Components
 	public class ClassUsingWindowInWindowsContext : ClassUsingWindow
 	{
 	}
-#endif
 }
+#endif

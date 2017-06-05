@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net45</TargetFramework>
+    <TargetFramework>netcoreapp1.0</TargetFramework>
   </PropertyGroup>
     
   <Import Project="..\..\common.props"></Import>
@@ -46,10 +46,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Castle.Core-log4net" Version="4.0.0" />
-    <PackageReference Include="Castle.Core-NLog" Version="4.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.1.2" />
     <PackageReference Include="NUnit" Version="3.6.1" />
     <PackageReference Include="NUnit.Console" Version="3.6.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.8.0-alpha1" />
+    <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,7 +62,12 @@
     <ProjectReference Include="..\Castle.Windsor\Castle.Windsor-VS2017.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
+    <PackageReference Include="Castle.Core-log4net" Version="4.0.0" />
+    <PackageReference Include="Castle.Core-NLog" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net45'">
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Configuration" />
@@ -68,10 +75,23 @@
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp1.0'">
+      <PackageReference Include="NLog.Extensions.Logging" Version="1.0.0-rtm-beta5" />
+      <PackageReference Include="System.Text.RegularExpressions" Version="4.3.0" />
+      <PackageReference Include="System.Collections" Version="4.3.0" />
+      <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
+      <PackageReference Include="System.ComponentModel" Version="4.3.0" />
+      <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
+      <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
+      <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
+      <PackageReference Include="System.Threading.Thread" Version="4.3.0" />
+      <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.0" />
+      <PackageReference Include="System.Xml.XmlDocument" Version="4.3.0" />
+      <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+      <PackageReference Include="System.Globalization" Version="4.3.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Facilities\Synchronize\Components\DummyForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-  </ItemGroup>
 </Project>

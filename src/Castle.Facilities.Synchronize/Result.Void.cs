@@ -15,6 +15,7 @@
 namespace Castle.Facilities.Synchronize
 {
 	using System;
+	using System.Reflection;
 
 	/// <summary>
 	///   Delegate called when results are available.
@@ -272,7 +273,7 @@ namespace Castle.Facilities.Synchronize
 
 			var outArg = outs[index];
 
-			if (outArg == null && type.IsValueType)
+			if (outArg == null && type.GetTypeInfo().IsValueType)
 			{
 				throw new InvalidOperationException(string.Format(
 					"The out argument at index {0} is a value type and cannot be null.  Please check the method signature.", index));

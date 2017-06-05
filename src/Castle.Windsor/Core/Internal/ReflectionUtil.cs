@@ -22,8 +22,9 @@ namespace Castle.Core.Internal
 	using System.Linq.Expressions;
 	using System.Reflection;
 	using System.Text;
-#if !(SILVERLIGHT)
 	using System.Collections.Concurrent;
+#if !FEATURE_REFLECTION_GETASSEMBLIES
+	using System.Runtime.Loader;
 #endif
 
 	public static class ReflectionUtil
@@ -78,11 +79,9 @@ namespace Castle.Core.Internal
 			try
 			{
 				Assembly assembly;
+#if FEATURE_REFLECTION_GETASSEMBLIES
 				if (IsAssemblyFile(assemblyName))
 				{
-#if (SILVERLIGHT)
-					assembly = Assembly.Load(Path.GetFileNameWithoutExtension(assemblyName));
-#else
 					if (Path.GetDirectoryName(assemblyName) == ApplicationDomains.BaseDirectory)
 					{
 						assembly = Assembly.Load(Path.GetFileNameWithoutExtension(assemblyName));
@@ -91,12 +90,21 @@ namespace Castle.Core.Internal
 					{
 						assembly = Assembly.LoadFile(assemblyName);
 					}
-#endif
 				}
 				else
 				{
 					assembly = Assembly.Load(assemblyName);
 				}
+#else
+				if (IsAssemblyFile(assemblyName))
+				{
+					assembly = Assembly.Load(AssemblyLoadContext.GetAssemblyName(assemblyName));
+				}
+				else
+				{
+					assembly = Assembly.Load(new AssemblyName(assemblyName));
+				}
+#endif
 				return assembly;
 			}
 			catch (FileNotFoundException)
@@ -148,25 +156,6 @@ namespace Castle.Core.Internal
 		}
 #endif
 
-		public static Assembly[] GetLoadedAssemblies()
-		{
-#if FEATURE_APPDOMAIN
-			return AppDomain.CurrentDomain.GetAssemblies();
-#else
-			string basePath = AppContext.BaseDirectory;
-
-			var files = new DirectoryInfo(basePath).GetFiles("*.dll");
-			Assembly[] results = new Assembly[files.Length];
-			
-			for(int i = 0; i < files.Length; i++)
-			{
-				results[i] = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromAssemblyPath(files[i].FullName);
-			}
-
-			return results;
-#endif
-		}
-
 		public static Type[] GetAvailableTypes(this Assembly assembly, bool includeNonExported = false)
 		{
 			try
@@ -181,6 +170,10 @@ namespace Castle.Core.Internal
 			{
 				return e.Types.FindAll(t => t != null);
 				// NOTE: perhaps we should not ignore the exceptions here, and log them?
+			}
+			catch (FileNotFoundException)
+			{
+				return new Type[] { };
 			}
 		}
 
@@ -300,10 +293,10 @@ namespace Castle.Core.Internal
 			throw new InvalidCastException(message);
 		}
 
-#if !SILVERLIGHT
 		private static AssemblyName GetAssemblyName(string filePath)
 		{
 			AssemblyName assemblyName;
+#if FEATURE_GETASSEMBLYNAME
 			try
 			{
 				assemblyName = AssemblyName.GetAssemblyName(filePath);
@@ -312,9 +305,11 @@ namespace Castle.Core.Internal
 			{
 				assemblyName = new AssemblyName { CodeBase = filePath };
 			}
+#else
+			assemblyName = AssemblyLoadContext.GetAssemblyName(filePath);
+#endif
 			return assemblyName;
 		}
-#endif
 
 		private static TBase Instantiate<TBase>(Type subtypeofTBase, object[] ctorArgs)
 		{
@@ -391,15 +386,6 @@ namespace Castle.Core.Internal
 
 		private static void AddApplicationAssemblies(Assembly assembly, HashSet<Assembly> assemblies, string applicationName)
 		{
-#if SILVERLIGHT
-			foreach (var referencedAssembly in GetLoadedAssemblies())
-			{
-				if (IsApplicationAssembly(applicationName, referencedAssembly.FullName))
-				{
-					assemblies.Add(referencedAssembly);
-				}
-			}
-#else
 			if (assemblies.Add(assembly) == false)
 			{
 				return;
@@ -411,7 +397,6 @@ namespace Castle.Core.Internal
 					AddApplicationAssemblies(LoadAssembly(referencedAssembly), assemblies, applicationName);
 				}
 			}
-#endif
 		}
 
 		private static bool IsApplicationAssembly(string applicationName, string assemblyName)

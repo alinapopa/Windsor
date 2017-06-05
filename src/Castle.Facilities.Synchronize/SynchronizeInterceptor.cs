@@ -17,9 +17,12 @@ namespace Castle.Facilities.Synchronize
 	using System;
 	using System.ComponentModel;
 	using System.Linq;
+	using System.Reflection;
 	using System.Runtime.Serialization;
 	using System.Threading;
+#if FEATURE_WINFORMS
 	using System.Windows.Threading;
+#endif
 
 	using Castle.Core;
 	using Castle.Core.Interceptor;
@@ -80,19 +83,23 @@ namespace Castle.Facilities.Synchronize
 				return;
 			}
 
+#if FEATURE_ISYNCHRONIZEINVOKE
 			if (InvokeWithSynchronizedTarget<ISynchronizeInvoke>(
 				invocation, target => target.InvokeRequired == false,
 				(target, call, result) => target.Invoke(safeInvoke, new object[] { call, result })))
 			{
 				return;
 			}
+#endif
 
+#if FEATURE_WINFORMS
 			if (InvokeWithSynchronizedTarget<DispatcherObject>(
 				invocation, target => target.Dispatcher.CheckAccess(),
 				(target, call, result) => target.Dispatcher.Invoke(safeInvoke, DispatcherPriority.Normal, call, result)))
 			{
 				return;
 			}
+#endif
 		}
 
 		/// <summary>
@@ -255,7 +262,9 @@ namespace Castle.Facilities.Synchronize
 			{
 				if (invocation.ReturnValue == null)
 				{
+#if FEATURE_SERIALIZATION
 					invocation.ReturnValue = GetDefault(returnType);
+#endif
 				}
 				result = new Result();
 			}
@@ -277,6 +286,7 @@ namespace Castle.Facilities.Synchronize
 			result.SetValues(synchronously, invocation.ReturnValue, outs.ToArray());
 		}
 
+#if FEATURE_SERIALIZATION
 		/// <summary>
 		/// Gets the default value for a type.
 		/// </summary>
@@ -285,7 +295,8 @@ namespace Castle.Facilities.Synchronize
 		[SecurityCritical]
 		private static object GetDefault(Type type)
 		{
-			return type.IsValueType ? FormatterServices.GetUninitializedObject(type) : null;
+			return type.GetTypeInfo().IsValueType ? FormatterServices.GetUninitializedObject(type) : null;
 		}
+#endif
 	}
 }

@@ -17,8 +17,8 @@ namespace Castle.Facilities.Synchronize
 	using System.Threading;
 #if FEATURE_WINFORMS
 	using System.Windows.Forms;
-#endif
 	using System.Windows.Threading;
+#endif
 
 	using Castle.MicroKernel.Facilities;
 	using Castle.MicroKernel.Registration;
@@ -41,18 +41,19 @@ namespace Castle.Facilities.Synchronize
 				Component.For<SynchronizeMetaInfoStore>().Instance(infoStore)
 				);
 
-			Kernel.ComponentModelBuilder.AddContributor(new SynchronizeComponentInspector(infoStore));
 #if FEATURE_WINFORMS
+			Kernel.ComponentModelBuilder.AddContributor(new SynchronizeComponentInspector(infoStore));
+
 			Kernel.ComponentModelBuilder.AddContributor(new CreateOnUIThreadInspector(FacilityConfig, conversionManager));
 
 			RegisterAmbientSynchronizationContext<WindowsFormsSynchronizationContext>();
-#endif
 
 			if (RegisterAmbientSynchronizationContext<DispatcherSynchronizationContext>() == false)
 			{
 				Kernel.Register(Component.For<DispatcherSynchronizationContext>().OnlyNewServices()
 					.DependsOn(new { dispatcher = Dispatcher.CurrentDispatcher }));
 			}
+#endif
 		}
 
 		private bool RegisterAmbientSynchronizationContext<TContext>()

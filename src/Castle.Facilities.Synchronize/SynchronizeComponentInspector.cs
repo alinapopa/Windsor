@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_WINFORMS
 namespace Castle.Facilities.Synchronize
 {
 	using System;
@@ -221,3 +222,4 @@ namespace Castle.Facilities.Synchronize
 		}
 	}
 }
+#endif

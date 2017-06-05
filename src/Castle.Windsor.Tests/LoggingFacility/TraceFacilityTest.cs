@@ -38,7 +38,7 @@ namespace Castle.Facilities.Logging.Tests
 			var source = new TraceSource("Default");
 			foreach (TraceListener listener in source.Listeners)
 			{
-				var consoleListener = listener as ConsoleTraceListener;
+				var consoleListener = listener as TextWriterTraceListener;
 				if (consoleListener != null)
 				{
 					consoleListener.Writer = consoleWriter;

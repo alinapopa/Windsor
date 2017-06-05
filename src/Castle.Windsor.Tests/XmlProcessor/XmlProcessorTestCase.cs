@@ -97,9 +97,10 @@ namespace Castle.Windsor.Tests.XmlProcessor
 
 		public XmlDocument GetXmlDocument(string fileName)
 		{
+			string content = File.ReadAllText(fileName);
 			XmlDocument doc = new XmlDocument();
 
-			doc.Load(fileName);
+			doc.LoadXml(content);
 
 			return doc;
 		}

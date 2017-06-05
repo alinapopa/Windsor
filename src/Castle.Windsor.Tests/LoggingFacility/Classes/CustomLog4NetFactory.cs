@@ -13,8 +13,7 @@
 // limitations under the License.
 
 
-#if !(SILVERLIGHT)
-
+#if CASTLE_LOG4NETINTEGRATION
 namespace CastleTests.LoggingFacility.Tests.Classes
 {
 	using System;
@@ -44,5 +43,4 @@ namespace CastleTests.LoggingFacility.Tests.Classes
 		}
 	}
 }
-
 #endif

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#if FEATURE_TYPE_GETINTERFACEMAP
 namespace Castle.Facilities.Synchronize
 {
 	using System;
@@ -111,7 +112,8 @@ namespace Castle.Facilities.Synchronize
 
 		private static bool IsInterfaceMappingCandidate(Type type, MemberInfo method)
 		{
-			return (type != method.DeclaringType && method.DeclaringType.IsInterface);
+			return (type != method.DeclaringType && method.DeclaringType.GetTypeInfo().IsInterface);
 		}
 	}
 }
+#endif

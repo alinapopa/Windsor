@@ -16,6 +16,7 @@ namespace CastleTests
 {
 	using System;
 	using System.Linq;
+	using System.Reflection;
 
 	using NUnit.Framework;
 	
@@ -26,8 +27,8 @@ namespace CastleTests
 		[Test]
 		public void All_Test_Cases_should_be_named_something_TestCase()
 		{
-			var types = GetType().Assembly.GetExportedTypes();
-			var testCases = types.Where(t => Attribute.IsDefined(t, typeof(TestFixtureAttribute), inherit: true))
+			var types = GetType().GetTypeInfo().Assembly.GetExportedTypes();
+			var testCases = types.Where(t => t.GetTypeInfo().IsDefined(typeof(TestFixtureAttribute), inherit: true))
 				.Except(new[] { typeof(AbstractContainerTestCase) })
 				.ToArray();
 
@@ -38,8 +39,8 @@ namespace CastleTests
 		[Test]
 		public void All_Test_Cases_should_inherit_AbstractContainerTestCase()
 		{
-			var types = GetType().Assembly.GetExportedTypes();
-			var testCases = types.Where(t => Attribute.IsDefined(t, typeof(TestFixtureAttribute), inherit: true))
+			var types = GetType().GetTypeInfo().Assembly.GetExportedTypes();
+			var testCases = types.Where(t => t.GetTypeInfo().IsDefined(typeof(TestFixtureAttribute), inherit: true))
 				.Except(new[] { typeof(AbstractContainerTestCase) })
 				.ToArray();
 

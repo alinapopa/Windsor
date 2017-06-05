@@ -17,6 +17,7 @@ namespace CastleTests
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Threading;
 
 	using Castle.Core.Configuration;
@@ -29,7 +30,7 @@ namespace CastleTests
 	{
 		private readonly DefaultConversionManager converter = new DefaultConversionManager();
 
-#if !SILVERLIGHT
+#if NUNIT_SETCULTUREATTRIBUTE
 		// currently not supported by SL
 		[Test]
 		[SetCulture("pl-PL")]

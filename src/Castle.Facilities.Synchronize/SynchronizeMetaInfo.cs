@@ -37,7 +37,11 @@ namespace Castle.Facilities.Synchronize
 		public SynchronizeMetaInfo(SynchronizeAttribute defaultSyncAttrib)
 		{
 			this.defaultSyncAttrib = defaultSyncAttrib;
+#if FEATURE_RUNTIMEMETHODHANDLE
 			method2Att = new Dictionary<MethodInfo, SynchronizeAttribute>(MatchByMethodHandle.Instance);
+#else
+			method2Att = new Dictionary<MethodInfo, SynchronizeAttribute>();
+#endif
 		}
 
 		/// <summary>
@@ -124,6 +128,7 @@ namespace Castle.Facilities.Synchronize
 			return references.AsReadOnly();
 		}
 
+#if FEATURE_RUNTIMEMETHODHANDLE
 		private class MatchByMethodHandle : IEqualityComparer<MethodInfo>
 		{
 			public static readonly MatchByMethodHandle Instance = new MatchByMethodHandle();
@@ -142,5 +147,6 @@ namespace Castle.Facilities.Synchronize
 				return obj.MethodHandle.GetHashCode();
 			}
 		}
+#endif
 	}
 }

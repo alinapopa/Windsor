@@ -40,7 +40,7 @@ namespace CastleTests.Facilities.Synchronize.Components
 		public override int DoWork(int work)
 		{
 			var remaining = base.DoWork(work);
-			if (ready.WaitOne(5000, false))
+			if (ready.WaitOne(5000))
 			{
 				if (exception != null)
 				{

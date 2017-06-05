@@ -187,7 +187,7 @@ namespace Castle.Facilities.Synchronize
 				}
 			}
 
-			PopulateMetaInfoFromType(metaInfo, implementation.BaseType);
+			PopulateMetaInfoFromType(metaInfo, implementation.GetTypeInfo().BaseType);
 		}
 	}
 }

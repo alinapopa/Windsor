@@ -332,9 +332,10 @@ namespace Castle.Facilities.Logging
 					return typeof(NullLogFactory);
 				case LoggerImplementation.Console:
 					return typeof(ConsoleFactory);
-#if !SILVERLIGHT
+#if FEATURE_EVENTLOG
 				case LoggerImplementation.Diagnostics:
 					return typeof(DiagnosticsLoggerFactory);
+#endif
 				case LoggerImplementation.Trace:
 					return typeof(TraceLoggerFactory);
 				case LoggerImplementation.NLog:
@@ -345,7 +346,6 @@ namespace Castle.Facilities.Logging
 					return converter.PerformConversion<Type>(ExtendedLog4NetLoggerFactoryTypeName);
 				case LoggerImplementation.ExtendedNLog:
 					return converter.PerformConversion<Type>(ExtendedNLogLoggerFactoryTypeName);
-#endif
 				default:
 					{
 						throw new FacilityException("An invalid loggingApi was specified: " + loggerApi);

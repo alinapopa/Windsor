@@ -92,6 +92,7 @@ namespace CastleTests
 			return Tuple.Create(fromInterface, fromClass, bothHaveTheAttribute);
 		}
 
+#if FEATURE_TYPE_GETINTERFACEMAP
 		[Test]
 		public void Obsolete_members_of_kernel_are_in_sync()
 		{
@@ -121,6 +122,7 @@ namespace CastleTests
 
 			Assert.IsEmpty(message.ToString(), message.ToString());
 		}
+#endif
 	}
 }
 
